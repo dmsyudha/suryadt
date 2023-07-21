@@ -4,14 +4,14 @@ const axios = require('axios');
 const API_BASE_URL = 'https://email-service.digitalenvision.com.au';
 
 class EmailService {
-    static async sendEmail(email, message) {
+    static async sendEmail(email, subject, message) {
         try {
-            const response = await axios.post(API_BASE_URL+'/send-email', { email, message });
-            console.log(response)
+            const response = await axios.post(`${API_BASE_URL}/send-email`, { email, subject, message });
+            console.log(response.status);
             return response.status;
         } catch (err) {
             if (err.response) {
-                console.log(err.response)
+                console.log('Error Response: ',err.response.message);
                 return err.response.status;
             } else {
                 return null;
@@ -19,11 +19,10 @@ class EmailService {
         }
     }
 
-    static async sendBirthdayEmail(user) {
+    static async sendMessage(user, subject, messageTemplate) {
         const { firstName, lastName, email } = user;
-        const message = `Hey, ${firstName} ${lastName}, it's your birthday!`;
-
-        const status = await this.sendEmail(email, message);
+        const message = messageTemplate.replace("{firstName}", firstName).replace("{lastName}", lastName);
+        const status = await this.sendEmail(email, subject, message);
         return status;
     }
 }

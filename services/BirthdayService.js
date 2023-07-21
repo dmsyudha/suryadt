@@ -17,9 +17,6 @@ exports.scheduleBirthdayEmails = async () => {
     }
   });  
 
-  // Fetch jobs which are in 'waiting' or 'active' state
-  const existingJobs = await birthdayQueue.getJobs(['waiting', 'active', 'delayed']);
-
   users.forEach(user => {
     // Construct a unique jobId using the user's email and the current date
     const jobId = `${user.email}-${now.toISOString().slice(0,10)}`;
@@ -35,7 +32,7 @@ exports.scheduleBirthdayEmails = async () => {
         },
       },
       {
-        jobId,  // Here's where we include the unique jobId
+        jobId,
         attempts: 3, 
         backoff: {
           type: 'exponential',

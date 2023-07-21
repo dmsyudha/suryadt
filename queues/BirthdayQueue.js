@@ -26,7 +26,7 @@ birthdayQueue.process(async (job, done) => {
     const subject = eventMessages[event].subject;
     const messageTemplate = eventMessages[event].messageTemplate;
     const result = await EmailService.sendMessage(job.data.user, subject, messageTemplate);
-    if(result.status !== 200) {
+    if(result !== 200) {
       throw new Error('Response code was not 200');
     }
     done(null, result);

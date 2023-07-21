@@ -22,6 +22,10 @@ const User = db.define('user', {
     location: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    time_zone: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 });
 

@@ -24,7 +24,7 @@ sequelize
   });
 
 // Run cron job
-cron.schedule('*/5 * * * * *', () => {
+cron.schedule('0 * * * *', () => {
   console.log("running cron job")
   BirthdayService.scheduleBirthdayEmails();
 });

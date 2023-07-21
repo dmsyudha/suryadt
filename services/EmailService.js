@@ -7,11 +7,10 @@ class EmailService {
     static async sendEmail(email, subject, message) {
         try {
             const response = await axios.post(`${API_BASE_URL}/send-email`, { email, subject, message });
-            console.log(response.status);
             return response.status;
         } catch (err) {
             if (err.response) {
-                console.log('Error Response: ',err.response.message);
+                console.log('Error Response: ',err);
                 return err.response.status;
             } else {
                 return null;

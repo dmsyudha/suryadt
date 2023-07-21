@@ -17,3 +17,12 @@ exports.deleteUser = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    await userService.updateUser(req.params.id, req.body);
+    res.status(200).end();
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};

@@ -19,3 +19,25 @@ exports.createUser = async (userData) => {
 exports.deleteUser = async (id) => {
   await User.destroy({ where: { id: id } });
 };
+
+exports.updateUser = async (id, userData) => {
+  if (userData.time_zone) {
+    validateTimeZone(userData.time_zone);
+  }
+  if (userData.email) {
+    validateEmail(userData.email);
+    await checkEmailInUse(userData.email, id);
+  }
+
+  const user = await User.update(userData, {
+    where: {
+      id: id
+    }
+  });
+
+  if (!user[0]) {
+    throw new Error('User not found');
+  }
+
+  return user;
+};

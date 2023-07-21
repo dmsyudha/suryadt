@@ -27,16 +27,30 @@ docker-compose up --build
 ```
 This will create and start all the services from your configuration. The app service uses nodemon, so it will automatically restart the server when file changes in the directory are detected.
 
-After all services are up, you can run the database migrations:
+If you have problem node_modules isn't installed when build, you can `npm i` before the container run.
+
+After all services are up, you can run `docker exec -it <container_name> -- sh` and do the database migrations:
 ```bash
 npx sequelize db:migrate
 ```
 This will create necessary tables in your PostgreSQL database.
 
+If you want to seed the data, you can run
+```bash
+npx sequelize db:seed:all
+```
+
 ## API Endpoints
 
 - Create a user: POST /user
-- Delete a user: DELETE /user
+  `curl -X POST -H "Content-Type: application/json" -d '{"firstName":"John","lastName":"Doe","email":"john.doe@example.com","birthday":"1980-01-01","location":"New York","time_zone":"Asia/Jakarta"}' http://localhost:3000/user`
+- Delete a user: DELETE /user/:id
+  `curl -X DELETE -H "Content-Type: application/json" -d  http://localhost:3000/user/1`
+- Update a user: PUT /user/:id
+  `curl -X PUT -H "Content-Type: application/json" -d '{"firstName":"John","lastName":"Doe","email":"john.doe@example.com","birthday":"1980-01-01","location":"New York","time_zone":"Asia/Jakarta"}' http://localhost:3000/user/1`
+
+  `email` should be unique
+  `time_zone` should use enum same as standard moment.tz.names 
 
 ## Running the tests
 

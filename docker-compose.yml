@@ -17,6 +17,7 @@ services:
       - DB_NAME=birthday_app
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - NODE_ENV=development
     ports:
       - 3000:3000
     depends_on:

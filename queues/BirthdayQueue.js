@@ -9,11 +9,26 @@ const redisConfig = {
   },
 };
 
-const birthdayQueue = new Queue('birthday greetings', redisConfig);
+const birthdayQueue = new Queue('greetings', redisConfig);
+
+const eventMessages = {
+  birthday: {
+    subject: 'Happy Birthday!',
+    messageTemplate: 'Hey, {firstName} {lastName}, happy birthday!'
+  }
+  // We can add more events here
+  // It also can use different files config if necessary
+};
 
 birthdayQueue.process(async (job, done) => {
   try {
-    const result = await EmailService.sendBirthdayEmail(job.data.user);
+    const event = job.data.event;
+    const subject = eventMessages[event].subject;
+    const messageTemplate = eventMessages[event].messageTemplate;
+    const result = await EmailService.sendMessage(job.data.user, subject, messageTemplate);
+    if(result.status !== 200) {
+      throw new Error('Response code was not 200');
+    }
     done(null, result);
   } catch (err) {
     done(err);
@@ -21,7 +36,7 @@ birthdayQueue.process(async (job, done) => {
 });
 
 birthdayQueue.on('completed', (job, result) => {
-  console.log(`Job completed with result ${result}`);
+  console.log(`Job ${job.id} completed with result ${result}`);
 });
 
 birthdayQueue.on('waiting', (jobId) => {
@@ -29,12 +44,11 @@ birthdayQueue.on('waiting', (jobId) => {
 });
 
 birthdayQueue.on('failed', (job, err) => {
-  console.log(`Job failed with error ${err}`);
+  console.log(`Job ${job.id} failed with error ${err}`);
 });
 
 birthdayQueue.on('error', (error) => {
-  console.log(`An error occured: ${error.message}`);
+  console.log(`An error occurred: ${error.message}`);
 });
-
 
 module.exports = birthdayQueue;

@@ -49,21 +49,4 @@ birthdayQueue.on('error', (error) => {
   console.log(`An error occurred: ${error.message}`);
 });
 
-// Clear jobs every 
-const cleanupQueue = async (queue, jobType, age) => {
-  console.log(`Cleaning up ${jobType} jobs...`);
-  await queue.clean(age, jobType);
-}
-
-// Clear completed, pending and failed jobs every two days at 03:00 AM
-cron.schedule('0 3 * * *', async () => {
-  const age = 86400000; // 24 hours in milliseconds
-  const jobTypes = ['completed', 'failed', 'delayed', 'active'];
-  
-  for (let jobType of jobTypes) {
-    await cleanupQueue(birthdayQueue, jobType, age);
-  }
-});
-
-
 module.exports = birthdayQueue;

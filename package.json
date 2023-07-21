@@ -14,13 +14,16 @@
     "bull": "^4.10.4",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
+    "faker": "^6.6.6",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.43",
     "node-cron": "^2.0.3",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
     "jest": "^26.6.3",
     "nodemon": "^3.0.1",
     "sequelize-cli": "^6.6.1",

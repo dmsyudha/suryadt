@@ -12,13 +12,13 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     acquire: 30000,
     idle: 10000
   },
-  logging: false,
+  logging: console.log,
   dialectOptions: {
-    useUTC: false, // for reading from database
+    useUTC: true, // for reading from database
     dateStrings: true,
     typeCast: true
   },
-  timezone: '+07:00' // for writing to database
+  timezone: '+00:00' // for writing to database
 });
 
 module.exports = sequelize;

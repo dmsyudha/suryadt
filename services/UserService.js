@@ -1,25 +1,25 @@
-const User = require('../models/User');
-const moment = require('moment');
+const User = require("../models/User");
+const moment = require("moment");
 
 class UserService {
   constructor() {}
 
   validateTimeZone(timeZone) {
     if (!moment.tz.zone(timeZone)) {
-      throw new Error('Invalid timezone');
+      throw new Error("Invalid timezone");
     }
   }
 
   validateEmail(email) {
-    if (!email.includes('@')) {
-      throw new Error('Invalid email');
+    if (!email.includes("@")) {
+      throw new Error("Invalid email");
     }
   }
 
   async checkEmailInUse(email, id) {
     const existingUser = await User.findOne({ where: { email: email } });
     if (existingUser && existingUser.id !== id) {
-      throw new Error('Email already in use');
+      throw new Error("Email already in use");
     }
   }
 
@@ -47,12 +47,12 @@ class UserService {
 
     const user = await User.update(userData, {
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
 
     if (!user[0]) {
-      throw new Error('User not found');
+      throw new Error("User not found");
     }
 
     return user;

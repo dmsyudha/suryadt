@@ -1,9 +1,9 @@
-const express = require('express');
-const sequelize = require('./config/database');
-const userRoutes = require('./routes/user');
-const cron = require('node-cron');
-const BirthdayService = require('./services/BirthdayService');
-const birthdayQueue = require('./queues/BirthdayQueue');
+const express = require("express");
+const sequelize = require("./configs/database");
+const userRoutes = require("./routes/user");
+const cron = require("node-cron");
+const BirthdayService = require("./services/BirthdayService");
+const birthdayQueue = require("./queues/BirthdayQueue");
 
 // Create Express application
 const app = express();
@@ -18,15 +18,15 @@ app.use(userRoutes);
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Database connection established successfully.');
+    console.log("Database connection established successfully.");
   })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
+  .catch((err) => {
+    console.error("Unable to connect to the database:", err);
   });
 
 // Run cron job to schedule birthday emails
-cron.schedule('0 * * * *', () => {
-  console.log("running cron job")
+cron.schedule("0 * * * *", () => {
+  console.log("running cron job");
   BirthdayService.scheduleBirthdayEmails();
 });
 
@@ -36,9 +36,9 @@ const cleanupQueue = async (queue, jobType, age) => {
   await queue.clean(age, jobType);
 };
 
-cron.schedule('0 3 * * *', async () => {
+cron.schedule("0 3 * * *", async () => {
   const age = 86400000; // 24 hours in milliseconds
-  const jobTypes = ['completed', 'failed', 'delayed', 'active'];
+  const jobTypes = ["completed", "failed", "delayed", "active"];
 
   for (let jobType of jobTypes) {
     await cleanupQueue(birthdayQueue, jobType, age);

@@ -8,7 +8,7 @@ module.exports = {
   },
   Mutation: {
     createUser: (_, { firstName, lastName, email, birthday, location }) => User.create({ firstName, lastName, email, birthday, location }),
-    updateUser: async (_, { id, firstName, lastName, email, birthday, location, lastKnownUpdatedAt }) => {
+    updateUser: async (_, { id, firstName, lastName, email, birthday, time_zone, lastKnownUpdatedAt }) => {
       const existingUser = await User.findOne({ where: { id: id } });
       if (!existingUser) {
         throw new Error("User not found");
@@ -19,7 +19,7 @@ module.exports = {
         throw new Error("CONFLICT");
       }
     
-      await User.update({ firstName, lastName, email, birthday, location }, { where: { id } });
+      await User.update({ firstName, lastName, email, birthday, time_zone }, { where: { id } });
       return User.findOne({ where: { id } });
     },    
     deleteUser: async (_, { id }) => {

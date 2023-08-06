@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "faker": "^6.6.6",
     "graphql": "^16.7.1",
+    "graphql-tag": "^2.12.6",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.43",
     "node-cron": "^2.0.3",

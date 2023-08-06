@@ -1,9 +1,12 @@
 const express = require("express");
-const sequelize = require("./configs/database");
+const sequelize = require("./config/database");
 const userRoutes = require("./routes/user");
 const cron = require("node-cron");
 const BirthdayService = require("./services/BirthdayService");
 const birthdayQueue = require("./queues/BirthdayQueue");
+const { ApolloServer } = require('apollo-server-express');
+const typeDefs = require('./schema');
+const resolvers = require('./resolvers');
 
 // Create Express application
 const app = express();
@@ -45,18 +48,19 @@ cron.schedule("0 3 * * *", async () => {
   }
 });
 
-// Start Express application
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// Apollo Server setup
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
 });
 
-const { ApolloServer } = require('apollo-server');
-const typeDefs = require('./schema');
-const resolvers = require('./resolvers');
+// Start ApolloServer before applying middleware
+server.start().then(() => {
+  server.applyMiddleware({ app });
 
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-);
+  // Start Express application
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+});
